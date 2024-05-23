@@ -1,0 +1,247 @@
+openapi: 3.0.0
+info:
+  title: POS API
+  version: 1.0.0
+  description: API documentation for the POS application
+
+servers:
+  - url: http://localhost:3000
+
+paths:
+  /products:
+    get:
+      summary: Get all products
+      responses:
+        '200':
+          description: A list of products
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Product'
+
+  /products/{id}:
+    get:
+      summary: Get a product by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: The ID of the product
+      responses:
+        '200':
+          description: A product object
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        '404':
+          description: Product not found
+
+  /products/find/name/{name}:
+    get:
+      summary: Get products by name
+      parameters:
+        - name: name
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The name of the product
+      responses:
+        '200':
+          description: A list of products
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Product'
+
+  /products/find/price-greater-than/{price}:
+    get:
+      summary: Get products with price greater than specified amount
+      parameters:
+        - name: price
+          in: path
+          required: true
+          schema:
+            type: number
+            format: float
+          description: The price threshold
+      responses:
+        '200':
+          description: A list of products
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Product'
+
+  /transactions:
+    get:
+      summary: Get all transactions
+      responses:
+        '200':
+          description: A list of transactions
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Transaction'
+    post:
+      summary: Create a new transaction
+      requestBody:
+        description: Transaction object
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Transaction'
+      responses:
+        '201':
+          description: Transaction created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Transaction'
+
+  /transactions/{id}:
+    get:
+      summary: Get a transaction by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: The ID of the transaction
+      responses:
+        '200':
+          description: A transaction object
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Transaction'
+        '404':
+          description: Transaction not found
+
+  /transactions/find/date-between:
+    get:
+      summary: Get transactions by date range
+      parameters:
+        - name: startDate
+          in: query
+          required: true
+          schema:
+            type: string
+            format: date-time
+          description: The start date of the range
+        - name: endDate
+          in: query
+          required: true
+          schema:
+            type: string
+            format: date-time
+          description: The end date of the range
+      responses:
+        '200':
+          description: A list of transactions
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Transaction'
+
+  /transactions/find/total-greater-than/{total}:
+    get:
+      summary: Get transactions with total greater than specified amount
+      parameters:
+        - name: total
+          in: path
+          required: true
+          schema:
+            type: number
+            format: float
+          description: The total amount threshold
+      responses:
+        '200':
+          description: A list of transactions
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Transaction'
+
+components:
+  schemas:
+    Product:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: Burger
+        description:
+          type: string
+          example: Delicious burger
+        price:
+          type: number
+          format: float
+          example: 50.00
+        imagePath:
+          type: string
+          example: /product-images/burger.jpg
+
+    Cart:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        productName:
+          type: string
+          example: Burger
+        quantity:
+          type: integer
+          example: 2
+        price:
+          type: number
+          format: float
+          example: 50.00
+
+    Transaction:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        total:
+          type: number
+          format: float
+          example: 230.00
+        payment:
+          type: number
+          format: float
+          example: 1000.00
+        change:
+          type: number
+          format: float
+          example: 770.00
+        transactionDate:
+          type: string
+          format: date-time
+          example: 2024-05-21T16:39:47.936Z
+        carts:
+          type: array
+          items:
+            $ref: '#/components/schemas/Cart'
