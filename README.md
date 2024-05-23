@@ -21,7 +21,7 @@ Node POS is a Node.js version of the [spring-boot-pos](https://github.com/djiord
 
 1. Clone the repository:
     ```bash
-    git clone [https://github.com/your-username/node-pos.git](https://github.com/djiordhan/node-pos)
+    git clone https://github.com/djiordhan/node-pos
     cd node-pos
     ```
 
