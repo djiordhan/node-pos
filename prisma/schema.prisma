@@ -18,7 +18,9 @@ model Product {
   name        String
   description String?
   price       Float
-  imagePath   String?
+  imagePath   String?     @map("image_path")
+
+  @@map("product")
 }
 
 model Cart {
