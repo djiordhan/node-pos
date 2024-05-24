@@ -14,7 +14,8 @@ router.get('/', async (req: Request, res: Response) => {
       }
     });
     res.json(transactions);
-  } catch (error) {
+  } catch (error: any) {
+    console.log(error.message);
     res.status(500).json({ error: 'Failed to fetch transactions' });
   }
 });
@@ -42,6 +43,7 @@ router.get('/:id', async (req: Request, res: Response) => {
 // Create a new transaction
 router.post('/', async (req: Request, res: Response) => {
   const { total, payment, change, transactionDate, carts } = req.body;
+  
   try {
     const newTransaction = await prisma.transaction.create({
       data: {
